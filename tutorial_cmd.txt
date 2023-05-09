@@ -86,7 +86,7 @@ In [24]: print(amazing_bestsellers)
 <QuerySet [Book(title="Harry Potter 1", rating=5, author="J.K. Rowlling", is_bestselling=True), Book(title="My Book", rating=5, author="dgamboa", is_bestselling=True), Book(title="Book 1", rating=5, author="Author 1", is_bestselling=True), Book(title="Book 2", rating=5, author="Author 2", is_bestselling=True), Book(title="Book 8", rating=5, author="Author 8", is_bestselling=True)]>
 
 
-
+git switch -c django-feature/admin
 
 
 

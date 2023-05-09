@@ -146,7 +146,7 @@ tomli = ">=2.0.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "0eaff3b7a9e3a83acc94159405836d2e0e54c8a18387d079a13401c6af19ccc5"
+content-hash = "6afa9f1cc090053cf1571d9440e1e8aee962cb6026bb98f25e9b7a5ffd361b6f"
 
 [metadata.files]
 asgiref = [
