@@ -5,6 +5,25 @@
 {% block content %}
     <section id="books">
         <h2>Books</h2>
+        <section>
+            <p>
+                <b>Total number of books:</b> {{ total_number_of_books }}
+            </p>
+            <p>
+                <b>Rating:</b>
+            </p>
+            <ul>
+                <li>
+                    <b>min: </b> {{ rating_metrics.rating__min }}
+                </li>
+                <li>
+                    <b>max: </b> {{ rating_metrics.rating__max }}
+                </li>
+                <li>
+                    <b>Average Rating:</b> {{ rating_metrics.rating__avg|floatformat:2 }}
+                </li>
+            </ul>
+        </section>
         <ul>
             {% for book in books %}
                 <li>
