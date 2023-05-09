@@ -1,0 +1,21 @@
+{% extends "book_outlet/base.html" %}
+{% block title %}
+    All Books
+{% endblock title %}
+{% block content %}
+    <section id="books">
+        <h2>Books</h2>
+        <ul>
+            {% for book in books %}
+                <li>
+                    {% comment "Option 1" %}
+                        <a href="{% url "book_outlet:book-detail" book.id %}">
+                    {% endcomment %}
+                    <a href="{{ book.get_absolute_url }}"> {# option 2: using urls.resolve in de model #}
+                        <b>{{ book.title }}</b>
+                    </a>  - (Rating: {{ book.rating }})
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+{% endblock content %}

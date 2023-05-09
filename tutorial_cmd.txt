@@ -1,0 +1,121 @@
+poetry new book-store
+poetry run python -m pip install --upgrade pip
+poetry add django python-dotenv
+poetry add yapf -D
+poetry run django-admin startproject book_store .
+poetry run py manage.py startapp book_outlet
+poetry run python manage.py runserver
+
+
+poetry run py manage.py makemigrations
+poetry run py manage.py migrate
+
+poetry run py manage.py shell
+>>> from book_outlet.models import Book
+>>> harry_potter = Book(title="Harry Potter 1", rating=5)
+>>> harry_potter
+Book(self.title='Harry Potter 1', self.rating=5)
+>>> harry_potter.title
+'Harry Potter 1'
+>>> harry_potter.save()
+
+>>> lotr = Book(title="Lord of the Rings", rating=4)
+>>> lotr.save()
+
+>>> Book.objects.all()
+<QuerySet [Book(self.title='Harry Potter 1', self.rating=5), Book(self.title='Lord of the Rings', self.rating=4)]>
+
+In [18]: harry_potter.delete()
+Out[18]: (1, {'book_outlet.Book': 1})
+
+In [20]: Book.objects.create(title='Harry Potter 1', rating=5, author="J.K. Rowlling", is_bestselling=True)
+Out[20]: Book(title='Harry Potter 1', rating=5), author=J.K. Rowlling, is_bestselling=True
+
+
+books = [Book(title='Book 1', author='Author 1', rating=5, is_bestselling=True), 
+ Book(title='Book 2', author='Author 2', rating=5, is_bestselling=True), 
+ Book(title='Book 3', author='Author 3', rating=1, is_bestselling=False), 
+ Book(title='Book 4', author='Author 4', rating=4, is_bestselling=True),
+ Book(title='Book 5', author='Author 5', rating=4, is_bestselling=False),
+ Book(title='Book 6', author='Author 6', rating=1, is_bestselling=True), 
+ Book(title='Book 7', author='Author 7', rating=3, is_bestselling=True), 
+ Book(title='Book 8', author='Author 8', rating=5, is_bestselling=True), 
+ Book(title='Book 9', author='Author 9', rating=3, is_bestselling=False), 
+ Book(title='Book 10', author='Author 10', rating=4, is_bestselling=True)
+ ]
+Book.objects.bulk_create(books)
+
+# A value
+In [2]: Book.objects.get(title="My Book")
+Out[2]: Book(title="My Book", rating=5, author="dgamboa", is_bestselling=True)
+
+In [3]: Book.objects.get(id=4)
+Out[3]: Book(title="My Book", rating=5, author="dgamboa", is_bestselling=True)
+
+In [13]: Book.objects.get(pk=2)
+Out[13]: Book(title="Lord of the Rings", rating=4, author="J.R.R. Tolkien", is_bestselling=True)
+
+
+# List of values
+In [7]: Book.objects.filter(rating=3)
+Out[7]: <QuerySet [Book(title="My Book 2", rating=3, author="dgamboa", is_bestselling=False), Book(title="Book 7", rating=3, author="Author 7", is_bestselling=True), Book(title="Book 9", rating=3, author="Author 9", is_bestselling=False)]>
+
+In [8]: Book.objects.filter(rating=3, author="dgamboa")
+Out[8]: <QuerySet [Book(title="My Book 2", rating=3, author="dgamboa", is_bestselling=False)]>
+
+# field lookup reference
+Book.objects.filter(rating__lt=3)
+Out[9]: <QuerySet [Book(title="Some Random Book", rating=1, author="Random Dude", is_bestselling=False), Book(title="Book 3", rating=1, author="Author 3", is_bestselling=False), Book(title="Book 6", rating=1, author="Author 6", is_bestselling=True)]>
+
+In [11]: Book.objects.filter(rating__lt=2, title__contains="Random")
+Out[11]: <QuerySet [Book(title="Some Random Book", rating=1, author="Random Dude", is_bestselling=False)]>
+
+
+# OR
+from django.db.models import Q
+Book.objects.filter(Q(rating__gt=4) | Q(is_bestselling=True))
+
+# OR & AND (Q and | for OR condition) ( , for an AND contition)
+In [21]: Book.objects.filter(Q(rating__gt=4) | Q(is_bestselling=False), Q(author="dgamboa"))
+Out[21]: <QuerySet [Book(title="My Book", rating=5, author="dgamboa", is_bestselling=True), Book(title="My Book 2", rating=3, author="dgamboa", is_bestselling=False)]>
+
+# Save a filter QuerySet and filter it again
+In [22]: bestsellers = Book.objects.filter(is_bestselling=True)
+In [23]: amazing_bestsellers = bestsellers.filter(rating__gt=4)
+In [24]: print(amazing_bestsellers)
+<QuerySet [Book(title="Harry Potter 1", rating=5, author="J.K. Rowlling", is_bestselling=True), Book(title="My Book", rating=5, author="dgamboa", is_bestselling=True), Book(title="Book 1", rating=5, author="Author 1", is_bestselling=True), Book(title="Book 2", rating=5, author="Author 2", is_bestselling=True), Book(title="Book 8", rating=5, author="Author 8", is_bestselling=True)]>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
