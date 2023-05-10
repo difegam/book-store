@@ -127,8 +127,28 @@ Out[30]:
 In [32]: book_pcc.author.first_name, book_lp.author.first_name
 Out[32]: ('Eric', 'Mark')
 
+#Cross Model Queries
+In [33]: books_by_author = Book.objects.filter(author__last_name="Lutz")
+In [34]: books_by_author
+Out[34]: <QuerySet [Book(title="Learning Python", rating=1, author="Mark Lutz", is_bestselling=True, slug="learning-python")]>
+
+# Get all books from an author 
+In [35]: mark =Author.objects.get(last_name="Lutz")
+In [37]: mark.book_set.all()  # By default this field is created by Django 
+Out[37]: <QuerySet [Book(title="Learning Python", rating=1, author="Mark Lutz", is_bestselling=True, slug="learning-python")]>
 
 
+# Rename book_set for books. Check Books.author field definition in models `related_name="books"`
+In [1]: from book_outlet.models import Book, Author
+
+In [2]: mark =Author.objects.get(last_name="Lutz")
+In [3]: mark.book_set.all() #! >> AttributeError: 'Author' object has no attribute 'book_set' 
+
+In [4]: mark.books.all()
+Out[4]: <QuerySet [Book(title="Learning Python", rating=1, author="Mark Lutz", is_bestselling=True, slug="learning-python")]>
+
+In [5]: mark.books.get(title="Learning Python")
+Out[5]: Book(title="Learning Python", rating=1, author="Mark Lutz", is_bestselling=True, slug="learning-python")
 
 
 
