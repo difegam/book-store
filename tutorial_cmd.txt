@@ -85,7 +85,7 @@ In [23]: amazing_bestsellers = bestsellers.filter(rating__gt=4)
 In [24]: print(amazing_bestsellers)
 <QuerySet [Book(title="Harry Potter 1", rating=5, author="J.K. Rowlling", is_bestselling=True), Book(title="My Book", rating=5, author="dgamboa", is_bestselling=True), Book(title="Book 1", rating=5, author="Author 1", is_bestselling=True), Book(title="Book 2", rating=5, author="Author 2", is_bestselling=True), Book(title="Book 8", rating=5, author="Author 8", is_bestselling=True)]>
 
-
+# Admin	
 poetry run python manage.py createsuperuser
 Username (leave blank to use 'admin-user'): 
 Email address: admin-user@gmail.com
@@ -94,20 +94,38 @@ Password (again):
 Superuser created successfully.
 
 
+# Relationships
+# Remove all books - 
+In [1]: from book_outlet.models import Book
+In [2]: Book.objects.all().delete()
+Out[2]: (15, {'book_outlet.Book': 15})
 
+from book_outlet.models import Book, Author
+In [4]: eric = Author(first_name="Eric", last_name="Matthes")
+   ...: mark = Author(first_name="Mark", last_name="Lutz")
+   
+In [5]: eric.save()
+In [6]: mark.save()
 
+In [9]: lp = Book(title="Learning Python", author=mark, rating=1, slug="learning-python", is_bestselling=True)
+In [11]: pcc = Book(title="Python Crash Course", author=eric, rating=3, slug="python-crash-course", is_bestselling=False)
 
+In [12]: lp.save()
+In [13]: pcc.save()
 
+In [17]: Book.objects.filter(title__contains="python")
+Out[17]: <QuerySet [Book(title="Learning Python", rating=1, author="Mark Lutz", is_bestselling=True, slug="learning-python"), 
+Book(title="Python Crash Course", rating=3, author="Eric Matthes", is_bestselling=False, slug="python-crash-course")]>
 
+In [18]: book_lp, book_pcc = Book.objects.filter(title__contains="python")
 
+In [30]: book_pcc.author, book_lp.author
+Out[30]:
+(Author(first_name="Eric", last_name="Matthes"),
+ Author(first_name="Mark", last_name="Lutz"))
 
-
-
-
-
-
-
-
+In [32]: book_pcc.author.first_name, book_lp.author.first_name
+Out[32]: ('Eric', 'Mark')
 
 
 
