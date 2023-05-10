@@ -4,7 +4,20 @@ from django.urls import reverse
 
 # Create your models here.
 
-# * One-to-Many: an Author that have multiples Books
+
+class Country(models.Model):
+    name = models.CharField(max_length=80)
+    code = models.CharField(max_length=2)
+
+    def __repr__(self) -> str:
+        return f'Country(name="{self.name}", code="{self.code}")'
+
+    def __str__(self) -> str:
+        return f"{self.name} - ( {self.code.upper()} )"
+
+    class Meta():
+        verbose_name_plural = "Countries"
+        ordering = ["name"]
 
 
 class Address(models.Model):
@@ -16,7 +29,11 @@ class Address(models.Model):
         return f'Address(street="{self.street}", postal_code="{self.postal_code}", city="{self.city}")'
 
     def __str__(self) -> str:
-        return f"{self.street}, {self.postal_code.upper()}, {self.city})"
+        return f"{self.street}, {self.postal_code.upper()}, {self.city}"
+
+    class Meta:
+        # https://docs.djangoproject.com/en/4.2/ref/models/options/#verbose-name
+        verbose_name_plural = "Addresses"
 
 
 class Author(models.Model):
@@ -46,6 +63,7 @@ class Book(models.Model):
         related_name="books")
     is_bestselling = models.BooleanField(default=False)
     slug = models.SlugField(default="", db_index=True, unique=True, blank=True)
+    published_countries = models.ManyToManyField(Country)
 
     def get_absolute_url(self):
         return reverse("book_outlet:book-detail", args=[self.slug])
